@@ -3,10 +3,11 @@ Methods for calculating the expected numbers of levelled NPCs in D&D world popul
 """
 from typing import Dict
 
-ONE_IN_A_MILLION = 1 / 1_000_000
+
+ONE_MILLION = 1_000_000
 
 
-def demographic(population: int, lvl_20_ratio: float = ONE_IN_A_MILLION) -> Dict[int, int]:
+def demographic(population: int, lvl_20_ratio: int = ONE_MILLION) -> Dict[int, int]:
     """
     Calculate the number of levelled NPCs in a given population.
 
