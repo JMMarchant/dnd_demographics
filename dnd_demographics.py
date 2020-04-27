@@ -2,7 +2,7 @@
 Methods for calculating the expected numbers of levelled NPCs in D&D world populations.
 """
 import sys
-from typing import Dict
+from typing import Dict, List
 
 from scipy import optimize
 
@@ -26,6 +26,15 @@ def demographic(population: int, lvl_20_ratio: int = ONE_MILLION) -> Dict[int, i
         A dict mapping the levels (0-20) to the number of NPCs at each level.
     """
     pass
+
+
+def generate_per_level_fractions(target_sum: int, num_levels: int = NUM_LEVELS) -> List[float]:
+    ratio = calc_geometric_ratio(target_sum, num_levels)
+    per_level = [(ratio ** i) / target_sum for i in range(num_levels)]
+
+    # Change so that the level 20 information is at the end
+    per_level.reverse()
+    return per_level
 
 
 def calc_geometric_ratio(target_sum: int, num_levels: int = NUM_LEVELS) -> float:
