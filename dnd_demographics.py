@@ -53,7 +53,7 @@ def calc_geometric_ratio(target_sum: int, num_levels: int = NUM_LEVELS) -> float
         raise ValueError(f"Cannot find acceptable ratio for target sum of {target_sum} with {num_levels} levels.")
 
 
-def _get_rough_upper(target_sum: int, num_levels: int):
+def _get_rough_upper(target_sum: int, num_levels: int = NUM_LEVELS):
     """Calculate a rough upper bound for the ratio by simply running through the numbers"""
     if num_levels <= 1:
         raise ValueError("Number of levels must be greater than 1 for geometric series to work.")
