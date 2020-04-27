@@ -42,6 +42,18 @@ def demographic(population: int, lvl_20_ratio: int = ONE_MILLION) -> Dict[int, i
 
 
 def generate_per_level_fractions(target_sum: int, num_levels: int = NUM_LEVELS) -> List[float]:
+    """
+    Generates the per-level fractions to reach the target sum (i.e. the highest level ratio).
+
+    Args:
+        target_sum:
+            The target sum for the geometric series; i.e. the 1:target_sum ratio for the highest level.
+        num_levels:
+            The number of levels to calculate the sum over.
+
+    Returns:
+        A list of fractions of the population, per-level.
+    """
     ratio = calc_geometric_ratio(target_sum, num_levels)
     per_level = [(ratio ** i) / target_sum for i in range(num_levels)]
 
