@@ -10,7 +10,7 @@ from scipy import optimize
 _MAX_ITER = 1000
 
 ONE_MILLION = 1_000_000
-NUM_LEVELS = 20 + 1  # for level "0"
+NUM_LEVELS = 20
 
 
 def demographic(population: int, highest_lvl_ratio: int = ONE_MILLION, num_levels: int = NUM_LEVELS) -> Dict[int, int]:
@@ -30,7 +30,7 @@ def demographic(population: int, highest_lvl_ratio: int = ONE_MILLION, num_level
     """
     # Generate the proportions of each level and scale to the desired population
     fractions = generate_per_level_fractions(highest_lvl_ratio, num_levels)
-    rough_numbers = {k: (v * population) for k, v in enumerate(fractions)}
+    rough_numbers = {(k + 1): (v * population) for k, v in enumerate(fractions)}
 
     # Take the rough numbers use the whole number part and probabilistically add the remainder
     final_numbers = dict()
@@ -39,6 +39,7 @@ def demographic(population: int, highest_lvl_ratio: int = ONE_MILLION, num_level
         if random.random() < extra_prob:
             num += 1
         final_numbers[level] = int(num)
+    final_numbers[0] = population - sum(final_numbers.values())
 
     return final_numbers
 
