@@ -1,6 +1,7 @@
 """
 Methods for calculating the expected numbers of levelled NPCs in D&D world populations.
 """
+import random
 import sys
 from typing import Dict, List
 
@@ -25,7 +26,19 @@ def demographic(population: int, lvl_20_ratio: int = ONE_MILLION) -> Dict[int, i
     Returns:
         A dict mapping the levels (0-20) to the number of NPCs at each level.
     """
-    pass
+    # Generate the proportions of each level and scale to the desired population
+    fractions = generate_per_level_fractions(lvl_20_ratio, NUM_LEVELS)
+    rough_numbers = {k: (v * population) for k, v in enumerate(fractions)}
+
+    # Take the rough numbers use the whole number part and probabilistically add the remainder
+    final_numbers = dict()
+    for level, rough_num in rough_numbers.items():
+        num, extra_prob = divmod(rough_num, 1)
+        if random.random() < extra_prob:
+            num += 1
+        final_numbers[level] = int(num)
+
+    return final_numbers
 
 
 def generate_per_level_fractions(target_sum: int, num_levels: int = NUM_LEVELS) -> List[float]:
