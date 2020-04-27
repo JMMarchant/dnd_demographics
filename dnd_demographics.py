@@ -1,8 +1,10 @@
 """
 Methods for calculating the expected numbers of levelled NPCs in D&D world populations.
 """
+import argparse
 import random
 import sys
+from pprint import pprint
 from typing import Dict, List
 
 from scipy import optimize
@@ -131,3 +133,22 @@ def ratio_formula(x: float, target_sum: int, num_levels: int = NUM_LEVELS) -> fl
         The evaluated value of the formula
     """
     return (x ** num_levels) - (target_sum * x) + target_sum - 1
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="Generate per-level demographic information for D&D. Given a target "
+                                                 "ratio for the highest level in the population, creates an "
+                                                 "exponentially decreasing ratio of each lower level to meet that "
+                                                 "target.")
+    parser.add_argument("--population", required=True, type=int,
+                        help="The population size to consider.")
+    parser.add_argument("--levels", type=int, default=20,
+                        help="The number of levels to consider. A level \"0\" will automatically be added to capture "
+                             "unlevelled NPCs. Default = 20.")
+    parser.add_argument("--ratio", type=int, default=ONE_MILLION,
+                        help="The 1:X frequency of the highest level in the population. Default = 1,000,000.")
+    args = parser.parse_args()
+
+    output = demographic(args.population, args.ratio, args.levels)
+
+    pprint(output)
