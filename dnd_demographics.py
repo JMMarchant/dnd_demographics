@@ -13,21 +13,23 @@ ONE_MILLION = 1_000_000
 NUM_LEVELS = 20 + 1  # for level "0"
 
 
-def demographic(population: int, lvl_20_ratio: int = ONE_MILLION) -> Dict[int, int]:
+def demographic(population: int, highest_lvl_ratio: int = ONE_MILLION, num_levels: int = NUM_LEVELS) -> Dict[int, int]:
     """
     Calculate the number of levelled NPCs in a given population.
 
     Args:
         population:
             The population to consider these levelled NPCs in.
-        lvl_20_ratio:
-            The fraction of the population that should be level 20.
+        highest_lvl_ratio:
+            The fraction of the population that should be of the highest level.
+        num_levels:
+            The number of levels to consider.
 
     Returns:
-        A dict mapping the levels (0-20) to the number of NPCs at each level.
+        A dict mapping the levels (0-highest) to the number of NPCs at each level.
     """
     # Generate the proportions of each level and scale to the desired population
-    fractions = generate_per_level_fractions(lvl_20_ratio, NUM_LEVELS)
+    fractions = generate_per_level_fractions(highest_lvl_ratio, num_levels)
     rough_numbers = {k: (v * population) for k, v in enumerate(fractions)}
 
     # Take the rough numbers use the whole number part and probabilistically add the remainder
@@ -41,23 +43,23 @@ def demographic(population: int, lvl_20_ratio: int = ONE_MILLION) -> Dict[int, i
     return final_numbers
 
 
-def generate_per_level_fractions(target_sum: int, num_levels: int = NUM_LEVELS) -> List[float]:
+def generate_per_level_fractions(highest_level_ratio: int, num_levels: int = NUM_LEVELS) -> List[float]:
     """
     Generates the per-level fractions to reach the target sum (i.e. the highest level ratio).
 
     Args:
-        target_sum:
-            The target sum for the geometric series; i.e. the 1:target_sum ratio for the highest level.
+        highest_level_ratio:
+            The 1:highest_level_ratio ratio for the highest level; i.e. the target sum for the geometric series.
         num_levels:
             The number of levels to calculate the sum over.
 
     Returns:
         A list of fractions of the population, per-level.
     """
-    ratio = calc_geometric_ratio(target_sum, num_levels)
-    per_level = [(ratio ** i) / target_sum for i in range(num_levels)]
+    ratio = calc_geometric_ratio(highest_level_ratio, num_levels)
+    per_level = [(ratio ** i) / highest_level_ratio for i in range(num_levels)]
 
-    # Change so that the level 20 information is at the end
+    # Change so that the highest level information is at the end
     per_level.reverse()
     return per_level
 
